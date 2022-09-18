@@ -3,33 +3,55 @@ local lspconfig = require("lspconfig")
 
 local M = {}
 
+local run_on_deno = function(fn)
+    local clients = vim.lsp.get_active_clients()
+    for _, client in ipairs(clients) do
+        if client.name == 'denols' then
+            fn(client)
+            break
+        end
+    end
+end
+
 local function setup_commands()
     local lsp_opts = dn.config.options.server
 
     lsp_opts.commands = vim.tbl_deep_extend("force", lsp_opts.commands or {}, {
         DenoPerformance = {
             function()
-                local clients = vim.lsp.get_active_clients()
-                for _, client in ipairs(clients) do
-                    if client.name == 'denols' then
-                        vim.pretty_print(client.request_sync('deno/performance'))
-                        break
-                    end
-                end
+                run_on_deno(function(client)
+                    vim.pretty_print(client.request_sync('deno/performance'))
+                end)
             end,
             description = "Requests the return of the timing averages for the internal instrumentation of Deno"
         },
         DenoReloadImportRegistries = {
             function()
-                local clients = vim.lsp.get_active_clients()
-                for _, client in ipairs(clients) do
-                    if client.name == 'denols' then
-                        client.request_sync('deno/reloadImportRegistries')
-                        break
-                    end
-                end
+                run_on_deno(function(client)
+                    client.request_sync('deno/reloadImportRegistries')
+                end)
             end,
             description = "Reloads any cached responses from import registries"
+        },
+        DenoTask = {
+            function()
+                run_on_deno(function(client)
+                    local tasks = client.request_sync('deno/task').result
+
+                    vim.ui.select(tasks, {
+                        prompt = 'Select deno task to run',
+                        format_item = function(task)
+                            return task.name
+                        end,
+                    }, function(choice)
+                        if choice == nil then
+                            return
+                        end
+                        vim.cmd("split term://deno task " .. choice.name)
+                    end)
+                end)
+            end,
+            description = "List/Run deno tasks"
         },
     })
 end
