@@ -34,9 +34,9 @@ require("deno-nvim").setup({
 <details>
   <summary>
 	<b>deno test with code lens</b>
-  </summary>	
-  
-  <p>use <i>vim.lsp.codelens</i> to activate this </p>
+  </summary>
+
+<p>use <i>vim.lsp.codelens</i> to activate this </p>
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/test.gif"/>
 </details>
 
@@ -44,8 +44,8 @@ require("deno-nvim").setup({
   <summary>
 	<b>auto complete import from deno registeries</b>
   </summary>
-  	
-  <p>Note: There seems to be currently a bug from deno side</p>
+
+<p>Note: There seems to be currently a bug from deno side</p>
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/auto_import.gif"/>
 </details>
 
