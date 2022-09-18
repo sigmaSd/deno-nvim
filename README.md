@@ -44,8 +44,6 @@ require("deno-nvim").setup({
   <summary>
 	<b>auto complete import from deno registeries</b>
   </summary>
-
-<p>Note: There seems to be currently a bug from deno side</p>
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/auto_import.gif"/>
 </details>
 
