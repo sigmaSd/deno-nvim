@@ -49,9 +49,13 @@ require("deno-nvim").setup({
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/auto_import.gif"/>
 </details>
 
-# Important
+## Important
 
 There is currently a bug in neovim that prevent deno lsp form working 100 %
 correctly see (https://github.com/neovim/neovim/pull/19967) and
 (https://github.com/denoland/deno/issues/15786). If you're comfortable with
 hacks you can use (https://github.com/neovim/neovim/pull/19773/files)
+
+## Credits
+
+Thanks to https://github.com/simrat39/rust-tools.nvim for the nice readable and commented codebase.
