@@ -63,7 +63,8 @@ hacks you can use (https://github.com/neovim/neovim/pull/19773/files)
 
 ## More stuff
 
-You can checkout https://github.com/sigmaSd/conjure-deno for deno repl integration in nvim
+You can checkout https://github.com/sigmaSd/conjure-deno for deno repl
+integration in nvim
 
 ## Credits
 
