@@ -61,6 +61,10 @@ correctly see (https://github.com/neovim/neovim/pull/19967) and
 (https://github.com/denoland/deno/issues/15786). If you're comfortable with
 hacks you can use (https://github.com/neovim/neovim/pull/19773/files)
 
+## More stuff
+
+You can checkout https://github.com/sigmaSd/conjure-deno for deno repl integration in nvim
+
 ## Credits
 
 Thanks to https://github.com/simrat39/rust-tools.nvim for the nice readable and
