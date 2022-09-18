@@ -3,6 +3,37 @@ local lspconfig = require("lspconfig")
 
 local M = {}
 
+local function setup_commands()
+    local lsp_opts = dn.config.options.server
+
+    lsp_opts.commands = vim.tbl_deep_extend("force", lsp_opts.commands or {}, {
+        DenoPerformance = {
+            function()
+                local clients = vim.lsp.get_active_clients()
+                for _, client in ipairs(clients) do
+                    if client.name == 'denols' then
+                        vim.pretty_print(client.request_sync('deno/performance'))
+                        break
+                    end
+                end
+            end,
+            description = "Requests the return of the timing averages for the internal instrumentation of Deno"
+        },
+        DenoReloadImportRegistries = {
+            function()
+                local clients = vim.lsp.get_active_clients()
+                for _, client in ipairs(clients) do
+                    if client.name == 'denols' then
+                        client.request_sync('deno/reloadImportRegistries')
+                        break
+                    end
+                end
+            end,
+            description = "Reloads any cached responses from import registries"
+        },
+    })
+end
+
 local function setup_handlers()
     local lsp_opts = dn.config.options.server
     local custom_handlers = {}
@@ -33,6 +64,7 @@ local function setup_lsp()
 end
 
 function M.setup()
+    setup_commands()
     setup_handlers()
     setup_lsp()
 end
