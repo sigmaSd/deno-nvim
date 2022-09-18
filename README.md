@@ -58,4 +58,5 @@ hacks you can use (https://github.com/neovim/neovim/pull/19773/files)
 
 ## Credits
 
-Thanks to https://github.com/simrat39/rust-tools.nvim for the nice readable and commented codebase.
+Thanks to https://github.com/simrat39/rust-tools.nvim for the nice readable and
+commented codebase.
