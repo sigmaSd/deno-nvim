@@ -56,10 +56,10 @@ require("deno-nvim").setup({
 
 ## Important
 
-There is currently a bug in neovim that prevent deno lsp form working 100 %
-correctly see (https://github.com/neovim/neovim/pull/19967) and
-(https://github.com/denoland/deno/issues/15786). If you're comfortable with
-hacks you can use (https://github.com/neovim/neovim/pull/19773/files)
+For the lsp to function 100% correctly you need:
+
+- nvim 0.8.0
+- deno 1.26.1 (not released yet, you can use `deno upgrade --canary` for now)
 
 ## More stuff
 
