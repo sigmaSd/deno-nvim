@@ -54,6 +54,9 @@ require("deno-nvim").setup({
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/task.gif"/>
 </details>
 
+The list of available user commands is here
+https://github.com/sigmaSd/deno-nvim/blob/master/lua/deno-nvim/lsp.lua#L52
+
 ## Important
 
 For the lsp to function 100% correctly you need:
