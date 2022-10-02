@@ -3,7 +3,7 @@ local lspconfig = require("lspconfig")
 
 local M = {}
 
-local function virtual_text_document_handler(uri, res)
+local function virtual_text_document_handler(fname, res, client)
     if not res then
         return nil
     end
@@ -13,14 +13,27 @@ local function virtual_text_document_handler(uri, res)
         vim.cmd.enew()
         return vim.api.nvim_get_current_buf()
     end)()
+    vim.api.nvim_buf_set_name(bufnr, fname)
 
-    local lines = vim.split(res.result, '\n')
+    local result = res.result
+
+    local lines
+    local filetype
+    if type(result) == "table" then
+        lines = vim.split(vim.json.encode(res.result), "\n")
+        filetype = "json"
+    else
+        lines = vim.split(res.result, '\n')
+        filetype = "markdown"
+    end
 
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, nil, lines)
+    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+    vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
+    vim.lsp.buf_attach_client(bufnr, client.id)
+    vim.lsp.buf.format()
     vim.api.nvim_buf_set_option(bufnr, 'readonly', true)
-    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
-    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
-    vim.api.nvim_buf_set_option(bufnr, 'filetype', 'markdown')
 end
 
 local run_on_deno = function(fn)
@@ -40,7 +53,7 @@ local function setup_commands()
         DenoPerformance = {
             function()
                 run_on_deno(function(client)
-                    vim.pretty_print(client.request_sync('deno/performance'))
+                    virtual_text_document_handler("performance.json", client.request_sync('deno/performance'), client)
                 end)
             end,
             description = "Requests the return of the timing averages for the internal instrumentation of Deno"
@@ -56,14 +69,13 @@ local function setup_commands()
         DenoStatus = {
             function()
                 run_on_deno(function(client)
-                    local uri = "deno:/status.md"
                     local result = client.request_sync(
                         'deno/virtualTextDocument',
                         {
-                            textDocument = { uri },
+                            textDocument = { uri = "deno:/status.md" },
                         }
                     )
-                    virtual_text_document_handler(uri, result)
+                    virtual_text_document_handler("status.md", result, client)
                 end)
             end,
             description = "Requests the status of the lsp"
