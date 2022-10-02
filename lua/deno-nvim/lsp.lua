@@ -3,6 +3,26 @@ local lspconfig = require("lspconfig")
 
 local M = {}
 
+local function virtual_text_document_handler(uri, res)
+    if not res then
+        return nil
+    end
+
+    local bufnr = (function()
+        vim.cmd.vsplit()
+        vim.cmd.enew()
+        return vim.api.nvim_get_current_buf()
+    end)()
+
+    local lines = vim.split(res.result, '\n')
+
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, nil, lines)
+    vim.api.nvim_buf_set_option(bufnr, 'readonly', true)
+    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+    vim.api.nvim_buf_set_option(bufnr, 'filetype', 'markdown')
+end
+
 local run_on_deno = function(fn)
     local clients = vim.lsp.get_active_clients()
     for _, client in ipairs(clients) do
@@ -32,6 +52,21 @@ local function setup_commands()
                 end)
             end,
             description = "Reloads any cached responses from import registries"
+        },
+        DenoStatus = {
+            function()
+                run_on_deno(function(client)
+                    local uri = "deno:/status.md"
+                    local result = client.request_sync(
+                        'deno/virtualTextDocument',
+                        {
+                            textDocument = { uri },
+                        }
+                    )
+                    virtual_text_document_handler(uri, result)
+                end)
+            end,
+            description = "Requests the status of the lsp"
         },
         DenoTask = {
             function()
