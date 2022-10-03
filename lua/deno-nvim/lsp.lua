@@ -11,9 +11,10 @@ local function virtual_text_document_handler(fname, res, client)
     local bufnr = (function()
         vim.cmd.vsplit()
         vim.cmd.enew()
-        return vim.api.nvim_get_current_buf()
+        local bufnr =  vim.api.nvim_get_current_buf()
+        vim.api.nvim_buf_set_name(bufnr, fname)
+        return bufnr
     end)()
-    vim.api.nvim_buf_set_name(bufnr, fname)
 
     local result = res.result
 
@@ -28,11 +29,13 @@ local function virtual_text_document_handler(fname, res, client)
     end
 
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, nil, lines)
-    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
-    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+    vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
     vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
     vim.lsp.buf_attach_client(bufnr, client.id)
+
+    -- format then set to readonly and remove modified flag
     vim.lsp.buf.format()
+    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
     vim.api.nvim_buf_set_option(bufnr, 'readonly', true)
 end
 
