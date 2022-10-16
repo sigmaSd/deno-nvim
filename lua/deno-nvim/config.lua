@@ -8,7 +8,6 @@ local defaults = {
         settings = {
             deno = {
                 enable = true,
-                unstable = false,
                 suggest = {
                     imports = {
                         hosts = {
