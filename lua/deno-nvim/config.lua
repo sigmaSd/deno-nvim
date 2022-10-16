@@ -11,17 +11,18 @@ local defaults = {
                 unstable = true,
                 suggest = {
                     imports = {
-                        hosts = {}
+                        hosts = {
+                            ["https://crux.land"] = true,
+                            ["https://deno.land"] = true,
+                            ["https://x.nest.land"] = true
+                        }
                     }
-                }
+                },
             },
         }
     }, -- deno lsp options
 }
 
-for _, register in ipairs({ "https://deno.land", "https://x.nest.land", "https://crux.land" }) do
-    defaults.server.settings.deno.suggest.imports.hosts[register] = true
-end
 
 function M.setup(options)
     M.options = vim.tbl_deep_extend("force", {}, defaults, options or {})
