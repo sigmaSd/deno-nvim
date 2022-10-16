@@ -58,7 +58,9 @@ require("deno-nvim").setup({
   <summary>
     <b>Inlay Hints</b>
   </summary>
-Inlay hints are supported in deno from version 1.26.2 (not released yet), to use it install [lsp-inlayhints.nvim](https://github.com/lvimuser/lsp-inlayhints.nvim) and add it this to your init.lua where you instantiate denols server:
+<img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/inlay_hints.png"/>
+  
+Inlay hints are supported in deno from version 1.26.2 (not released yet), to use it install https://github.com/lvimuser/lsp-inlayhints.nvim and add this to your init.lua where you instantiate denols server:
 
 ```lua
 require "deno-nvim".setup({
@@ -93,8 +95,6 @@ require "deno-nvim".setup({
     }
 })
 ```
-
-<img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/inlay_hints.png"/>
 
 Now you should be able to show the hints with
 `require('lsp-inlayhints').toggle()`
