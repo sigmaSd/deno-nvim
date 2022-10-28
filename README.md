@@ -106,7 +106,7 @@ https://github.com/sigmaSd/deno-nvim/blob/master/lua/deno-nvim/lsp.lua#L52
 
 ## Important
 
-For the lsp to function 100% correctly you need:
+For the lsp to function 100% correctly you need atleast:
 
 - nvim 0.8.0
 - deno 1.26.1
