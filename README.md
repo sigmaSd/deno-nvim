@@ -28,6 +28,11 @@ require("deno-nvim").setup({
   },
 })
 ```
+## Local settings
+
+To use local settings for each project, checkout https://github.com/folke/neoconf.nvim which can even parse `.vscode/settings.json`
+
+The default settings are located here https://github.com/denoland/vscode_deno/blob/main/package.json
 
 ## Usage
 
@@ -60,7 +65,11 @@ require("deno-nvim").setup({
   </summary>
 <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/inlay_hints.png"/>
   
-Inlay hints are supported in deno from version 1.27.0, to use it install https://github.com/lvimuser/lsp-inlayhints.nvim and add this to your init.lua where you instantiate denols server:
+Inlay hints are supported in deno from version 1.27.0, to use it install https://github.com/lvimuser/lsp-inlayhints.nvim 
+
+You can set it locally by using neoconf with these settings https://github.com/denoland/vscode_deno/blob/main/package.json#L245
+
+You can set it globally by adding this to your init.lua where you instantiate denols server:
 
 ```lua
 require "deno-nvim".setup({
