@@ -34,6 +34,8 @@ To use local settings for each project, checkout https://github.com/folke/neocon
 
 The default settings are located here https://github.com/denoland/vscode_deno/blob/main/package.json
 
+Its also recomended to install jsonls with lspconfig to get autocompletion inside the settings
+
 ## Usage
 
 <details>
