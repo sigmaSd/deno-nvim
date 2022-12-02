@@ -51,6 +51,7 @@ inside the settings
 <p>use <i>vim.lsp.codelens</i> to activate this </p>
 <p>
 Example of keybindings:
+
 ```lua
 vim.keymap.set("n", "<space>dr", function()
     vim.lsp.codelens.refresh();
