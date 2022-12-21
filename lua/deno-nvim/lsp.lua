@@ -3,6 +3,34 @@ local lspconfig = require("lspconfig")
 
 local M = {}
 
+local write_virtual_text_document = function(bufnr, res, client)
+  if not res then
+    return
+  end
+
+  local result = res.result
+
+  local lines
+  local filetype
+  if type(result) == "table" then
+      lines = vim.split(vim.json.encode(res.result), "\n")
+      filetype = "json"
+  else
+      lines = vim.split(res.result, '\n')
+      filetype = "markdown"
+  end
+
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, nil, lines)
+  vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
+  vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
+  vim.lsp.buf_attach_client(bufnr, client.id)
+
+  -- format then set to readonly and remove modified flag
+  vim.lsp.buf.format()
+  vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+  vim.api.nvim_buf_set_option(bufnr, 'readonly', true)
+end
+
 local function virtual_text_document_handler(fname, res, client)
     if not res then
         return nil
@@ -11,32 +39,13 @@ local function virtual_text_document_handler(fname, res, client)
     local bufnr = (function()
         vim.cmd.vsplit()
         vim.cmd.enew()
-        local bufnr =  vim.api.nvim_get_current_buf()
+        local bufnr = vim.api.nvim_get_current_buf()
         vim.api.nvim_buf_set_name(bufnr, fname)
         return bufnr
     end)()
 
-    local result = res.result
+    write_virtual_text_document(bufnr, res, client)
 
-    local lines
-    local filetype
-    if type(result) == "table" then
-        lines = vim.split(vim.json.encode(res.result), "\n")
-        filetype = "json"
-    else
-        lines = vim.split(res.result, '\n')
-        filetype = "markdown"
-    end
-
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, nil, lines)
-    vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
-    vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
-    vim.lsp.buf_attach_client(bufnr, client.id)
-
-    -- format then set to readonly and remove modified flag
-    vim.lsp.buf.format()
-    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
-    vim.api.nvim_buf_set_option(bufnr, 'readonly', true)
 end
 
 local run_on_deno = function(fn)
@@ -131,6 +140,31 @@ local function setup_handlers()
     )
 end
 
+local function setup_autocmd()
+    local group = vim.api.nvim_create_augroup('deno-nvim', {
+        clear = true
+    })
+
+    vim.api.nvim_create_autocmd({ 'BufReadCmd' }, {
+        group = group,
+        pattern = 'deno:/*',
+        callback = function()
+            local afile = vim.fn.expand('<afile>')
+            run_on_deno(function(client)
+                write_virtual_text_document(
+                    vim.api.nvim_get_current_buf(),
+                    client.request_sync('deno/virtualTextDocument', {
+                        textDocument = {
+                            uri = afile
+                        }
+                    }),
+                    client
+                )
+            end)
+        end
+    })
+end
+
 local function setup_lsp()
     lspconfig.denols.setup(dn.config.options.server)
 end
@@ -138,6 +172,7 @@ end
 function M.setup()
     setup_commands()
     setup_handlers()
+    setup_autocmd()
     setup_lsp()
 end
 
