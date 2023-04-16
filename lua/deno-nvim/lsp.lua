@@ -86,7 +86,16 @@ local function setup_commands()
         DenoTask = {
             function()
                 run_on_deno(function(client)
-                    local tasks = client.request_sync('deno/task').result
+                    local response = client.request_sync('deno/task')
+                    if not response then
+                        -- the server is not ready yet
+                        return
+                    end
+                    local tasks = response.result
+                    if not tasks then
+                        -- there is no tasks defined
+                        return
+                    end
 
                     vim.ui.select(tasks, {
                         prompt = 'Select deno task to run',
