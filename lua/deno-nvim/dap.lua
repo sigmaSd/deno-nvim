@@ -42,7 +42,6 @@ function M.setup_adapter()
 
     if opts.dap.adapter ~= false then
         dap.adapters["pwa-node"] = opts.dap.adapter
-        vim.print(dap.adapters.dn_node)
     end
 end
 
