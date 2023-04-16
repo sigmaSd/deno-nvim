@@ -7,6 +7,7 @@ local function virtual_text_document_handler(fname, res, client)
     if not res or not res.result then
         return nil
     end
+    local result = res.result
 
     local bufnr = (function()
         vim.cmd.vsplit()
@@ -16,15 +17,14 @@ local function virtual_text_document_handler(fname, res, client)
         return bufnr
     end)()
 
-    local result = res.result
 
     local lines
     local filetype
     if type(result) == "table" then
-        lines = vim.split(vim.json.encode(res.result), "\n")
+        lines = vim.split(vim.json.encode(result), "\n")
         filetype = "json"
     else
-        lines = vim.split(res.result, '\n')
+        lines = vim.split(result, '\n')
         filetype = "markdown"
     end
 
