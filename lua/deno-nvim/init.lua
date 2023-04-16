@@ -1,6 +1,7 @@
 local M = {
     config = nil,
     lsp = nil,
+    dap = nil,
 }
 
 function M.setup(opts)
@@ -12,10 +13,17 @@ function M.setup(opts)
     local lsp = require("deno-nvim.lsp")
     M.lsp = lsp
 
+    local dn_dap = require("deno-nvim.dap")
+    M.dap = dn_dap
+
 
     config.setup(opts)
     lsp.setup()
     commands.setup_lsp_commands()
+
+    if pcall(require, "dap") then
+        dn_dap.setup_adapter()
+    end
 end
 
 return M

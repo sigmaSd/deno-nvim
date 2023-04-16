@@ -9,6 +9,9 @@ using `packer.nvim`
 ```lua
 use 'neovim/nvim-lspconfig'
 use 'sigmasd/deno-nvim'
+
+-- Debugging
+use 'mfussenegger/nvim-dap'
 ```
 
 ## Setup
@@ -60,6 +63,36 @@ end, opts)
 ```
 </p>
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/test.gif"/>
+</details>
+
+<details>
+  <summary>
+	<b>dap support</b>
+  </summary>
+  <p>
+Support debugging with https://github.com/mfussenegger/nvim-dap
+
+Follow the instruction here https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-deno to download and extract dapDebugServer.
+
+Then you will need to set `dap.adapter.executable.args`  to `{dapDebugServerPath, "${port}"}` when using `deno.nvim.setup`. (don't change `"${port}"` its not a place holder)
+
+Example:
+
+```lua
+    require("deno-nvim").setup {
+      dap = {
+        adapter = {
+          executable = {
+            args = {
+              "/absolute-path/to/js-debug/src/dapDebugServer.js", "${port}"
+            }
+          }
+        }
+      }
+    }
+```
+  </p>
+  <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/dap.gif"/>
 </details>
 
 <details>

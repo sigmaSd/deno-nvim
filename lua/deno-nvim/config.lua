@@ -20,6 +20,36 @@ local defaults = {
             },
         }
     }, -- deno lsp options
+    -- debugging stuff
+    dap = {
+        adapter = {
+            type = "server",
+            host = "localhost",
+            port = "${port}",
+            name = "dn_node",
+            executable = {
+                command = "node",
+                -- `args` needs to be set
+                -- follow the instruction here `https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-deno` to download and extract dapDebugServer
+                -- then set `args` to the full path to dapDebugServer.js + "${port}"
+                -- example:
+                -- ```lua
+                -- require("deno-nvim").setup {
+                --   dap = {
+                --     adapter = {
+                --       executable = {
+                --         args = {
+                --           "/absolute-path/to/js-debug/src/dapDebugServer.js", "${port}"
+                --         }
+                --       }
+                --     }
+                --   }
+                -- }
+                -- ```
+                args = {},
+            },
+        }
+    }
 }
 
 

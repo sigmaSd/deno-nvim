@@ -11,7 +11,7 @@ local function virtual_text_document_handler(fname, res, client)
     local bufnr = (function()
         vim.cmd.vsplit()
         vim.cmd.enew()
-        local bufnr =  vim.api.nvim_get_current_buf()
+        local bufnr = vim.api.nvim_get_current_buf()
         vim.api.nvim_buf_set_name(bufnr, fname)
         return bufnr
     end)()
@@ -28,7 +28,7 @@ local function virtual_text_document_handler(fname, res, client)
         filetype = "markdown"
     end
 
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, nil, lines)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
     vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
     vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
     vim.lsp.buf_attach_client(bufnr, client.id)
