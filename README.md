@@ -29,6 +29,10 @@ require("deno-nvim").setup({
     on_attach = ...,
     capabilites = ...
   },
+  -- if you're using dap to debug (see the README for more info)
+  dap = {
+    adapter = ...
+  }
 })
 ```
 
