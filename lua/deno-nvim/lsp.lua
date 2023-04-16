@@ -4,7 +4,7 @@ local lspconfig = require("lspconfig")
 local M = {}
 
 local function virtual_text_document_handler(fname, res, client)
-    if not res then
+    if not res or not res.result then
         return nil
     end
 
