@@ -16,10 +16,12 @@ function M.setup(opts)
     local dn_dap = require("deno-nvim.dap")
     M.dap = dn_dap
 
+    local custom_commands = require("deno-nvim.custom_commands")
 
     config.setup(opts)
     lsp.setup()
     commands.setup_lsp_commands()
+    custom_commands.setup_custom_commands()
 
     if pcall(require, "dap") then
         dn_dap.setup_adapter()

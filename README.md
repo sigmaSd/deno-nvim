@@ -167,6 +167,16 @@ Now you should be able to show the hints with
 
 </details>
 
+<details>
+  <summary>
+	<b>Custom useful commands</b>
+  </summary>
+  <p>This part is WIP, currently I'm adding some commands that I personaly find useful. 
+  Feel free to open an issue or PR to improve this part. Usage `:Deno custom_command` (press Tab for completion)</p>
+  <i>Check/Update dependencies</i>
+  <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/update_check_deps.gif"/>
+</details>
+
 The list of available user commands is here
 https://github.com/sigmaSd/deno-nvim/blob/master/lua/deno-nvim/lsp.lua#L52
 
