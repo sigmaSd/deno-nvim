@@ -190,7 +190,7 @@ For the lsp to function 100% correctly you need atleast:
 ## More stuff
 
 You can checkout https://github.com/sigmaSd/conjure-deno for deno repl
-integration in nvim
+integration in nvim or just use `iron.nvim` https://github.com/sigmaSd/conjure-deno#alternative
 
 ## Credits
 
