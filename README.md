@@ -95,6 +95,27 @@ Example:
       }
     }
 ```
+
+If you want to use dap outside of tests, you can add theses lines somewhere in your init.lua
+```lua
+-- same thing for configurations.javascript
+require("dap").configurations.typescript = {
+  {
+    type = 'pwa-node',
+    request = 'launch',
+    name = "Launch file",
+    runtimeExecutable = "deno",
+    runtimeArgs = {
+      "run",
+      "--inspect-wait",
+      "--allow-all"
+    },
+    program = "${file}",
+    cwd = "${workspaceFolder}",
+    attachSimplePort = 9229,
+  },
+}
+```
   </p>
   <img src="https://github.com/sigmaSd/nvim-deno-demos/raw/master/dap.gif"/>
 </details>
