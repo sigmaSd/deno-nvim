@@ -86,7 +86,7 @@ local function setup_commands()
     DenoTask = {
       function()
         run_on_deno(function(client)
-          local response = client.request_sync('deno/task')
+          local response = client.request_sync('deno/taskDefinitions')
           if not response then
             -- the server is not ready yet
             return
