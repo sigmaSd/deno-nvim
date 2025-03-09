@@ -5,7 +5,7 @@ local function get_latest_version(line, on_data)
     return
   end
   -- if line doesn't resemble an http dependency, return
-  if not string.match(line, "https://") then
+  if not string.match(line, 'https://') then
     return
   end
   -- extract the url from the line
@@ -18,26 +18,31 @@ local function get_latest_version(line, on_data)
   -- extract the module name
   -- in this case its simple_shell
   local module = string.match(url, '/x/(.+@.+)')
-  local namespace = module and "x" or "std"
+  local namespace = module and 'x' or 'std'
   if not module then
     module = string.match(url, '/(std@.+)')
   end
   module = vim.split(module, '/')[1]
   -- fetch the latest version
-  local latest_url = string.format('https://apiland.deno.dev/v2/modules/%s',
-    namespace == "x" and vim.split(module, '@')[1] or "std")
+  local latest_url = string.format(
+    'https://apiland.deno.dev/v2/modules/%s',
+    namespace == 'x' and vim.split(module, '@')[1] or 'std'
+  )
 
   local uv = vim.loop
   local stdout = uv.new_pipe()
   local stderr = uv.new_pipe()
 
-  local cmd = string.format([[
+  local cmd = string.format(
+    [[
         const latest_version = await fetch("%s").then(r=>r.json()).then(r => r.latest_version)
         console.log(latest_version)
-        ]], latest_url)
-  uv.spawn("deno", {
-    args = { "eval", cmd },
-    stdio = { stdout, stderr }
+        ]],
+    latest_url
+  )
+  uv.spawn('deno', {
+    args = { 'eval', cmd },
+    stdio = { stdout, stderr },
   })
 
   if stderr ~= nil then
@@ -45,7 +50,7 @@ local function get_latest_version(line, on_data)
       assert(not err, err)
       if data then
         local latest_version = data
-        local new_module = vim.split(module, '@')[1] .. "@" .. latest_version
+        local new_module = vim.split(module, '@')[1] .. '@' .. latest_version
         new_module = vim.trim(new_module)
         if new_module == module then
           on_data()
@@ -60,11 +65,16 @@ local function get_latest_version(line, on_data)
   end
 end
 
-local namespace_id = vim.api.nvim_create_namespace("deno update")
+local namespace_id = vim.api.nvim_create_namespace('deno update')
 local function mark_line(buf, mark, start_idx)
   vim.schedule(function()
-    local extmark_id = vim.api.nvim_buf_set_extmark(buf, namespace_id, start_idx, -1,
-      { id = start_idx + 1, virt_text = { { mark } }, })
+    local extmark_id = vim.api.nvim_buf_set_extmark(
+      buf,
+      namespace_id,
+      start_idx,
+      -1,
+      { id = start_idx + 1, virt_text = { { mark } } }
+    )
     vim.defer_fn(function()
       vim.api.nvim_buf_del_extmark(buf, namespace_id, extmark_id)
     end, 3000)
@@ -83,7 +93,7 @@ function DenoUpdateImports()
           if new_line ~= nil then
             vim.api.nvim_buf_set_lines(buf, start_idx, start_idx + 1, false, { new_line })
           end
-          mark_line(buf, "✨", start_idx)
+          mark_line(buf, '✨', start_idx)
         end)
       end)
     end
@@ -101,7 +111,7 @@ function DenoUpdateImport()
         if new_line ~= nil then
           vim.api.nvim_buf_set_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false, { new_line })
         end
-        mark_line(buf, "✨", cursor_pos[1] - 1)
+        mark_line(buf, '✨', cursor_pos[1] - 1)
       end)
     end)
   end
@@ -116,9 +126,9 @@ function DenoCheckImports()
       get_latest_version(line, function(new_line, new_module)
         local mark
         if new_line then
-          mark = string.format("🔺%s", new_module)
+          mark = string.format('🔺%s', new_module)
         else
-          mark = "✨"
+          mark = '✨'
         end
         mark_line(buf, mark, i - 1)
       end)
@@ -135,9 +145,9 @@ function DenoCheckImport()
     get_latest_version(line, function(new_line, new_module)
       local mark
       if new_line then
-        mark = string.format("🔺%s", new_module)
+        mark = string.format('🔺%s', new_module)
       else
-        mark = "✨"
+        mark = '✨'
       end
       mark_line(buf, mark, cursor_pos[1] - 1)
     end)
@@ -145,21 +155,21 @@ function DenoCheckImport()
 end
 
 function M.setup_custom_commands()
-  vim.api.nvim_create_user_command("Deno", function(meta)
-    if meta.args == "update_imports" then
+  vim.api.nvim_create_user_command('Deno', function(meta)
+    if meta.args == 'update_imports' then
       DenoUpdateImports()
-    elseif meta.args == "update_import" then
+    elseif meta.args == 'update_import' then
       DenoUpdateImport()
-    elseif meta.args == "check_imports" then
+    elseif meta.args == 'check_imports' then
       DenoCheckImports()
-    elseif meta.args == "check_import" then
+    elseif meta.args == 'check_import' then
       DenoCheckImport()
     end
   end, {
     nargs = 1,
     complete = function()
-      return { "update_imports", "update_import", "check_imports", "check_import" }
-    end
+      return { 'update_imports', 'update_import', 'check_imports', 'check_import' }
+    end,
   })
 end
 
