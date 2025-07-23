@@ -40,7 +40,9 @@ function M.setup_adapter()
   local dap = require('dap')
   local opts = dn.config.options
 
-  if opts.dap.adapter ~= false then
+  -- Only set the adapter if it's not disabled and no adapter is already configured
+  -- This prevents overriding adapters set by other plugins (e.g., AstroNvim TypeScript pack)
+  if opts.dap.adapter ~= false and not dap.adapters['pwa-node'] then
     dap.adapters['pwa-node'] = opts.dap.adapter
   end
 end
